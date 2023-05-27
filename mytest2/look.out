@@ -1,0 +1,94 @@
+in CompUnit
+in CompUnit
+in FuncDef
+in FuncType
+out FuncType
+in Block
+in BlockItem
+in Stmt
+in Exp
+in AddExp
+in MulExp
+in UnaryExp
+in PrimaryExp
+in Number
+out Number
+out PrimaryExp
+out UnaryExp
+node->v = 4 node->tintLiteral node->is_computable1
+Line 540: [op.size()] = [0]
+out MulExp
+out AddExp
+out Exp
+--------return 4
+out Stmt
+out BlockItem
+out Block
+out FuncDef
+in CompUnit
+in FuncDef
+in FuncType
+out FuncType
+--------call tmp_int_0, global_func()
+in Block
+in BlockItem
+in Decl
+in VarDecl
+in BType
+out BType
+in VarDef
+Line 302: [ident] = [a]
+in InitVal
+ident = a scope_name = a_1
+in Exp
+in AddExp
+in MulExp
+in UnaryExp
+out UnaryExp
+node->v =  node->tint node->is_computable0
+Line 108: ["warning"] = [warning]
+--------mov tmp_int_0 int,  int
+Line 540: [op.size()] = [0]
+out MulExp
+--------mov tmp_int_1 int, tmp_int_0 int
+out AddExp
+out Exp
+--------def a_1 int, tmp_int_1 int
+out InitVal
+out VarDef
+out VarDecl
+out Decl
+out BlockItem
+in BlockItem
+in Stmt
+in Exp
+in AddExp
+in MulExp
+in UnaryExp
+in PrimaryExp
+in LVal
+Line 680: [if_right] = [1]
+Line 692: [ident] = [a]
+int
+fuck
+ste_ident = a
+out LVal
+out PrimaryExp
+out UnaryExp
+node->v = a node->tint node->is_computable0
+Line 108: ["warning"] = [warning]
+--------mov tmp_int_0 int, a_1 int
+Line 540: [op.size()] = [0]
+out MulExp
+--------mov tmp_int_2 int, tmp_int_0 int
+out AddExp
+out Exp
+--------return tmp_int_2
+out Stmt
+out BlockItem
+out Block
+out FuncDef
+out CompUnit
+out CompUnit
+--------return null
+out CompUnit

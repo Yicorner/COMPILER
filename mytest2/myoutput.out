@@ -1,0 +1,24 @@
+void global_func()
+	0: mov a_0, 0
+	1: return null
+end
+
+int func(int p_1)
+	0: sub tmp_int_0, p_1, 1
+	1: mov p_1, tmp_int_0
+	2: return p_1
+	3: return 0
+end
+
+int main()
+	0: call tmp_int_1, global_func()
+	1: mov b_1, 0
+	2: mov a_0, 10
+	3: call tmp_int_2, func(a_0)
+	4: mov b_1, tmp_int_2
+	5: return b_1
+	6: return 0
+end
+
+GVT:
+	a_0 int 0

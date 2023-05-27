@@ -1,0 +1,1 @@
+riscv32-unknown-linux-gnu-gcc ref.c -S ref.s
