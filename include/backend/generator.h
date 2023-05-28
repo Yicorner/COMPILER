@@ -1,8 +1,8 @@
 #ifndef GENERARATOR_H
 #define GENERARATOR_H
 
-#include "ir/ir.h"
 #include "backend/rv_def.h"
+#include "ir/ir.h"
 #include "backend/rv_inst_impl.h"
 
 #include<map>
@@ -16,8 +16,8 @@ namespace backend {
 using rv::rvOPCODE;
 // it is a map bewteen variable and its mem addr, the mem addr of a local variable can be identified by ($sp + off)
 struct stackVarMap {
-    std::map<ir::Operand, int> _table;
-
+    std::map<string, int> _table;
+    std::map<string, int> _ptrTable;
     /**
      * @brief find the addr of a ir::Operand
      * @return the offset
@@ -46,7 +46,8 @@ struct Generator {
     std::map<std::string, int> map_s_reg_to_addr;
     std::vector<rv::rv_inst> vec_rv_inst;
     std::set<std::string> set_reg;
-
+    std::set<std::string> libfunc;
+    std::map<int, std::string> map_line_label;
     Generator( ir::Program &, std::ofstream & );
 
     // reg allocate api
@@ -89,6 +90,23 @@ struct Generator {
     void add_fuck_in();
     void add_fuck_out();
     rvOPCODE shift_to_rvopcode( ir::Operator op );
+    void do_local_but_ptr( Instruction );
+    void do_call( ir::CallInst );
+    void get_reg_assign( ir::Operand, string );
+    void get_ptr_addr_a5( ir::Operand );
+    void call_func_name( string );
+    void move_func_result( string );
+    void alloc_label_function( const ir::Function & );
+    void do_goto( Instruction, int );
+    void do_lss( Instruction );
+    void do_leq( Instruction );
+    void do_gtr( Instruction );
+    void do_geq( Instruction );
+    void do_eq( Instruction );
+    void do_neq( Instruction );
+    void do_not( Instruction );
+    void do_and( Instruction );
+    void do_or( Instruction );
 };
 
 

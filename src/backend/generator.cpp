@@ -15,8 +15,8 @@ using ir::Type;
 using rv::rv_inst;
 using rv::rvOPCODE;
 using std::cout;
+using ir::CallInst;
 #define TODO assert(0 && "todo")
-
 backend::Generator::Generator( ir::Program &p, std::ofstream &f ): program( p ), fout( f ) {}
 
 void backend::Generator::gen() {
@@ -37,6 +37,19 @@ void backend::Generator::gen() {
     set_reg.insert( "a4" );
     set_reg.insert( "a5" );
     set_reg.insert( "ra" );
+    set_reg.insert( "t4" );
+    set_reg.insert( "t5" );
+    libfunc.insert( "getint" );
+    libfunc.insert( "getch" );
+    libfunc.insert( "getarray" );
+    libfunc.insert( "getfloat" );
+    libfunc.insert( "getfarray" );
+    libfunc.insert( "putint" );
+    libfunc.insert( "putch" );
+    libfunc.insert( "putarray" );
+    libfunc.insert( "putfloat" );
+    libfunc.insert( "putfarray" );
+    libfunc.insert( "putf" );
     int i = 0;
     for ( Function function : program.functions ) {
         if ( function.name == "global_func" ) {
@@ -49,32 +62,32 @@ void backend::Generator::gen() {
 }
 
 void backend::Generator::gen_global_func( const Function &function ) {
-    fout << "   .file	\"ref.c\"\n";
-    fout << "   .option nopic\n";
-    fout << "   .text\n";
+    fout << "\t.file	\"ref.c\"\n";
+    fout << "\t.option nopic\n";
+    fout << "\t.text\n";
     for ( Instruction *inst : function.InstVec ) {
-        if ( inst->op == Operator::def ) {
-            fout << "   .globl	" << inst->des.name << '\n';
-            fout << "   .data\n";
-            fout << "   .align 2\n";
-            fout << "   .type	" << inst->des.name << ", @object\n";
-            fout << "   .size	" << inst->des.name << ", 4\n";
+        if ( inst->op == Operator::def || inst->op == Operator::mov ) {
+            fout << "\t.globl	" << inst->des.name << '\n';
+            fout << "\t.data\n";
+            fout << "\t.align 2\n";
+            fout << "\t.type	" << inst->des.name << ", @object\n";
+            fout << "\t.size	" << inst->des.name << ", 4\n";
             fout << inst->des.name << ":\n";
-            fout << "   .word	" << inst->op1.name << "\n";
+            fout << "\t.word	" << inst->op1.name << "\n";
         } else if ( inst->op == Operator::store && inst->op2.name == "0" ) {
-            fout << "   .globl	" << inst->op1.name << '\n';
-            fout << "   .data\n";
-            fout << "   .align 2\n";
-            fout << "   .type	" << inst->op1.name << ", @object\n";
-            fout << "   .size	" << inst->op1.name << ", " << find_size( inst->op1.name ) << "\n";
+            fout << "\t.globl	" << inst->op1.name << '\n';
+            fout << "\t.data\n";
+            fout << "\t.align 2\n";
+            fout << "\t.type	" << inst->op1.name << ", @object\n";
+            fout << "\t.size	" << inst->op1.name << ", " << find_size( inst->op1.name ) << "\n";
             fout << inst->op1.name << ":\n";
-            fout << "   .word	" << inst->des.name << "\n";
+            fout << "\t.word	" << inst->des.name << "\n";
         } else if ( inst->op == Operator::store ) {
-            fout << "   .word   " << inst->des.name << "\n";
+            fout << "\t.word   " << inst->des.name << "\n";
         }
     }
-    fout << "   .text" << endl;
-    fout << "   .align	1" << endl;
+    fout << "\t.text" << endl;
+    fout << "\t.align	1" << endl;
 }
 
 string backend::Generator::find_size( const string &s ) {
@@ -153,6 +166,19 @@ void backend::Generator::add_store_s0() {
     vec_rv_inst.push_back( rvinst );
     return;
 }
+void backend::Generator::alloc_label_function( const Function &function ) {
+    map_line_label.clear();
+    int ldex = 1;
+    for ( int i = 0; i < function.InstVec.size(); i++ ) {
+        Instruction &inst = *function.InstVec[i];
+        if ( inst.op == Operator::_goto ) {
+            int line = i + eval_int( inst.des.name );
+            string label = ".L" + to_string( ( ldex++ ) );
+            if ( map_line_label.count( line ) == 0 )
+                map_line_label[line] = label;
+        }
+    }
+}
 void backend::Generator::gen_func( const Function &function, string back ) {
     vec_rv_inst.clear();
     cal_seg( function );
@@ -161,15 +187,23 @@ void backend::Generator::gen_func( const Function &function, string back ) {
     do_line_tmp( function );
     alloc_tmp_register( function );
     int offset = alloc_all_addr( function, back );
+    alloc_label_function( function );
+    out( map_line_label );
     out( varmap._table );
     out( map_tmp_register );
-    fout << "   .globl	" << function.name << endl;
-    fout << "   .type	" << function.name << ", @function" << endl;
+    fout << "\t.globl	" << function.name << endl;
+    fout << "\t.type	" << function.name << ", @function" << endl;
     fout << function.name << ":" << endl;
     add_store_s0();
     gen_addi( "sp", "sp", to_string( offset ) );
     gen_addi( "s0", "sp", to_string( -offset ) );
     for ( int i = 0; i < function.InstVec.size(); i++ ) {
+        if ( map_line_label.count( i ) ) {
+            rv_inst rvinst;
+            rvinst.op = rvOPCODE::LABEL;
+            rvinst.label = map_line_label[i] + ":";
+            vec_rv_inst.push_back( rvinst );
+        }
         Operator op = function.InstVec[i]->op;
         if ( op == Operator::call && ( ( ir::CallInst * )function.InstVec[i] )->op1.name == "global_func" ) continue;
         switch ( op ) {
@@ -197,11 +231,42 @@ void backend::Generator::gen_func( const Function &function, string back ) {
             do_mul( *function.InstVec[i], shift_to_rvopcode( op ) );
             break;
         case Operator::_goto:
-            assert( 0 );
+            do_goto( *function.InstVec[i], i );
             break;
         case Operator::call:
-        //do_call( *function.InstVec[i] );
+            do_call( *( ( CallInst * )function.InstVec[i] ) );
+            break;
+        case Operator::lss:
+            do_lss( *function.InstVec[i] );
+            break;
+        case Operator::leq:
+            do_leq( *function.InstVec[i] );
+            break;
+        case Operator::gtr:
+            do_gtr( *function.InstVec[i] );
+            break;
+        case Operator::geq:
+            do_geq( *function.InstVec[i] );
+            break;
+        case Operator::eq:
+            do_eq( *function.InstVec[i] );
+            break;
+        case Operator::neq:
+            do_neq( *function.InstVec[i] );
+            break;
+        case Operator::_not:
+            do_not( *function.InstVec[i] );
+            break;
+        case Operator::_and:
+            do_and( *function.InstVec[i] );
+            break;
+        case Operator::_or:
+            do_or( *function.InstVec[i] );
+            break;
+        case Operator::alloc:
+            break;
         default:
+            assert( 0 );
             break;
         }
     }
@@ -209,9 +274,133 @@ void backend::Generator::gen_func( const Function &function, string back ) {
         fout << rvinst.draw() << endl;
     }
     fout << "	.size	" << function.name << ", .-" << function.name << endl;
-    fout << "	.ident	\"GCC: (GNU) 9.2.0\"" << endl;
-    fout << "	.section	.note.GNU-stack,\"\",@progbits" << endl;
+    if ( function.name == "main" ) {
+        fout << "	.ident	\"GCC: (GNU) 9.2.0\"" << endl;
+        fout << "	.section	.note.GNU-stack,\"\",@progbits" << endl;
+    }
     return;
+}
+void backend::Generator::do_goto( Instruction inst, int line ) {
+    line += eval_int( inst.des.name );
+    string label = map_line_label[line];
+    //out( line, label );
+    Operand operand;
+    if ( inst.op1.type == Type::null ) {
+        rv_inst rvinst;
+        rvinst.op = rvOPCODE::JAL;
+        rvinst.label = label;
+        vec_rv_inst.push_back( rvinst );
+    } else {
+        rv_inst rvinst;
+        rvinst.op = rvOPCODE::BNE;
+        rvinst.rs1 = get_reg( inst.op1, "a5" );
+        rvinst.rs2 = "zero";
+        rvinst.label = label;
+        vec_rv_inst.push_back( rvinst );
+    }
+}
+void backend::Generator::get_reg_assign( Operand operand, string reg ) {
+    if ( operand.type != Type::IntLiteral && !is_tmp( operand.name ) ) {
+        get_reg( operand, reg );;
+    } else {
+        Instruction mv = {operand, {}, {reg, Type::Int}, Operator::mov};
+        do_move( mv );
+    }
+}
+void backend::Generator::get_ptr_addr_a5( Operand param ) {
+    if ( varmap._table.count( param.name ) ) {
+        rv_inst rvinst_addr;
+        rvinst_addr.op = rvOPCODE::ADDI;
+        rvinst_addr.rd = "a5";
+        rvinst_addr.rs1 = "s0";
+        rvinst_addr.imm = to_string( varmap._table[param.name] );
+        vec_rv_inst.push_back( rvinst_addr );
+    } else if ( varmap._ptrTable.count( param.name ) ) {
+        rv_inst rvinst_addr;
+        rvinst_addr.op = rvOPCODE::LW;
+        rvinst_addr.rd = "a5";
+        rvinst_addr.rs1 = "s0";
+        rvinst_addr.imm = to_string( varmap._ptrTable[param.name] );
+        vec_rv_inst.push_back( rvinst_addr );
+    } else {
+        rv_inst rvinst;
+        rvinst.op = rvOPCODE::LUI;
+        rvinst.rd = "a5";
+        rvinst.imm = "%hi(" + param.name + ")";
+        vec_rv_inst.push_back( rvinst );
+        rvinst.op = rvOPCODE::LW;
+        rvinst.rd = "a5";
+        rvinst.rs1 = "a5";
+        rvinst.imm = "%lo(" + param.name + ")";
+        vec_rv_inst.push_back( rvinst );
+    }
+}
+void backend::Generator::do_call( CallInst inst ) {
+    if ( libfunc.count( inst.op1.name ) ) {
+        for ( Operand param : inst.argumentList ) {
+            int adex = 0;
+            string desreg = "a" + to_string( adex++ );
+            if ( param.type == Type::IntPtr ) {
+                get_ptr_addr_a5( param );
+                param = {"a5", Type::Int};
+            }
+            get_reg_assign( param, desreg );
+        }
+        call_func_name( inst.op1.name );
+        move_func_result( inst.des.name );
+        return;
+    }
+    for ( pair<string, string> kv : map_tmp_register ) {
+        string tmp = kv.first;
+        string reg = kv.second;
+        gen_sw( reg, 1, 0 );
+    }
+    // store params
+    int offset = -12;
+    for ( Operand param : inst.argumentList ) {
+        if ( param.type == Type::IntPtr ) {
+            get_ptr_addr_a5( param );
+            rv_inst rvinst;
+            rvinst.op = rvOPCODE::SW;
+            rvinst.rs2 = "a5";
+            rvinst.rs1 = "sp";
+            rvinst.imm = to_string( offset );
+            vec_rv_inst.push_back( rvinst );
+            offset -= 4;
+            continue;
+        }
+        rv_inst rvinst;
+        rvinst.op = rvOPCODE::SW;
+        rvinst.rs2 = get_reg_no_liter( param.name, "a5" );
+        rvinst.rs1 = "sp";
+        rvinst.imm = to_string( offset );
+        vec_rv_inst.push_back( rvinst );
+        offset -= 4;
+    }
+// call func_name
+    call_func_name( inst.op1.name );
+// lw s
+    for ( pair<string, string> kv : map_tmp_register ) {
+        string tmp = kv.first;
+        string reg = kv.second;
+        gen_lw( reg );
+    }
+// mov tmp a0
+    move_func_result( inst.des.name );
+}
+void backend::Generator::call_func_name( string func_name ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::CALL;
+    rvinst.rd = func_name;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::move_func_result( string tmp_name ) {
+    rv_inst rvinst2;
+    rvinst2.op = rvOPCODE::MOV;
+    rvinst2.rs1 = "a0";
+    if ( !is_tmp( tmp_name ) ) assert( 0 );
+    rvinst2.rd = get_reg( tmp_name, "a5" );
+    vec_rv_inst.push_back( rvinst2 );
 }
 rvOPCODE backend::Generator::shift_to_rvopcode( Operator op ) {
     switch ( op ) {
@@ -325,11 +514,40 @@ void backend::Generator::do_global_addr( Instruction inst ) {
     rvinst_add.rs2 = "a4";
     vec_rv_inst.push_back( rvinst_add );
 }
+void backend::Generator::do_local_but_ptr( Instruction inst ) {
+    // ulti a3
+    // a5 = len
+    string reg = get_reg_no_liter( inst.op2, "a5" );
+    // a4 = len * 4
+    rv_inst rvinst_sll;
+    rvinst_sll.op = rvOPCODE::SLLI;
+    rvinst_sll.rd = "a4";
+    rvinst_sll.rs1 = reg;
+    rvinst_sll.imm = "2";
+    vec_rv_inst.push_back( rvinst_sll );
+    // a3 base
+    rv_inst rvinst_lw;
+    rvinst_lw.op = rvOPCODE::LW;
+    rvinst_lw.rd = "a3";
+    rvinst_lw.rs1 = "s0";
+    rvinst_lw.imm = to_string( varmap._ptrTable[inst.op1.name] );
+    vec_rv_inst.push_back( rvinst_lw );
+    // a3 = a3 + a4
+    rv_inst rvinst_add;
+    rvinst_add.op = rvOPCODE::ADD;
+    rvinst_add.rd = "a3";
+    rvinst_add.rs1 =  "a3";
+    rvinst_add.rs2 = "a4";
+    vec_rv_inst.push_back( rvinst_add );
+}
 void backend::Generator::do_load( Instruction inst ) {
     // tmp, local, global
     if ( varmap._table.count( inst.op1.name ) ) {
         // local
         do_local_addr( inst );
+    } else if ( varmap._ptrTable.count( inst.op1.name ) ) {
+        // local but not local
+        do_local_but_ptr( inst );
     } else {
         do_global_addr( inst );
     }
@@ -357,6 +575,9 @@ void backend::Generator::do_store( Instruction inst ) {
     if ( varmap._table.count( inst.op1.name ) ) {
         // local
         do_local_addr( inst );
+    } else  if ( varmap._ptrTable.count( inst.op1.name ) ) {
+        // local but not local
+        do_local_but_ptr( inst );
     } else {
         // global
         do_global_addr( inst );
@@ -541,7 +762,7 @@ void backend::Generator::do_move( Instruction inst ) {
         case 1:
             rvinst.op = rvOPCODE::LI;
             rvinst.rd = "a5";
-            rvinst.imm = get_reg( op1, "a5" );
+            rvinst.imm = get_reg( op1, "a4" );
             vec_rv_inst.push_back( rvinst );
             store_reg( des.name, rvinst.rd );
             break;
@@ -549,7 +770,7 @@ void backend::Generator::do_move( Instruction inst ) {
             // 当 mov 的 op1 是tmp_int, 可以优化
             rvinst.op = rvOPCODE::MOV;
             rvinst.rd = "a5";
-            rvinst.rs1 = get_reg( op1, "a5" );
+            rvinst.rs1 = get_reg( op1, "a4" );
             vec_rv_inst.push_back( rvinst );
             store_reg( des.name, rvinst.rd );
             break;
@@ -573,12 +794,12 @@ void backend::Generator::store_reg( string name, string reg ) {
     if ( !varmap._table.count( name ) ) {
         rv_inst rvinst;
         rvinst.op = rvOPCODE::LUI;
-        rvinst.rd = "a5";
+        rvinst.rd = "a6";
         rvinst.imm = "%hi(" + name + ")";
         vec_rv_inst.push_back( rvinst );
         rvinst.op = rvOPCODE::SW;
-        rvinst.rd = reg;
-        rvinst.rs1 = "a5";
+        rvinst.rs2 = reg;
+        rvinst.rs1 = "a6";
         rvinst.imm = "%lo(" + name + ")";
         vec_rv_inst.push_back( rvinst );
         return;
@@ -608,6 +829,7 @@ void backend::Generator::alloc_tmp_register( const Function &function ) {
                 string reg = *unuse.begin();
                 unuse.erase( unuse.begin() );
                 map_tmp_register[tmp_name] = reg;
+                out( line, tmp_name, reg, unuse );
             }
         }
         if ( map_line_tmp_destroy.count( line ) ) {
@@ -629,25 +851,32 @@ void backend::Generator::do_line_tmp( const Function &function ) {
 }
 int backend::Generator::alloc_all_addr( const Function &function, string back ) {
     varmap._table.clear();
+    varmap._ptrTable.clear();
     int offset = -8;
     map_s_reg_to_addr.clear();
     map_s_reg_to_addr["s0"] = -4;
     map_s_reg_to_addr["ra"] = -8;
     offset -= 4; // for ra register
+    // alloc params
+    for ( Operand operand : function.ParameterList ) {
+        string name = operand.name;
+        if ( name.size() > 7 && name.substr( 0, 7 ) == "tmp_int" ) continue;
+        if ( name.size() >= 2 && name.substr( name.size() - 2, 2 ) == "_1" && varmap._table.count( name ) == 0 ) {
+            if ( operand.type == Type::IntPtr ) {
+                varmap._ptrTable[name] = offset;
+                offset -= 4;
+                continue;
+            }
+            varmap._table[name] = offset;
+            offset -= 4;
+        }
+    }
     // alloc s reg
     for ( pair<string, string> kv : map_tmp_register ) {
         string tmp = kv.first;
         string reg = kv.second;
         map_s_reg_to_addr[reg] = offset;
         offset -= 4;
-    }
-    // alloc params
-    for ( Operand operand : function.ParameterList ) {
-        string name = operand.name;
-        if ( name.size() >= back.size() && name.substr( name.size() - back.size(), back.size() ) == back && varmap._table.count( name ) == 0 ) {
-            varmap._table[name] = offset;
-            offset -= 4;
-        }
     }
     // alloc local
     for ( const Instruction   *inst : function.InstVec ) {
@@ -664,7 +893,17 @@ int backend::Generator::alloc_all_addr( const Function &function, string back ) 
                     inst->op1, inst->op2, inst->des
                 } ) {
             string name = operand.name;
-            if ( name.size() >= back.size() && name.substr( name.size() - back.size(), back.size() ) == back && varmap._table.count( name ) == 0 ) {
+            // if ( name.size() >= back.size() && name.substr( name.size() - back.size(), back.size() ) == back && varmap._table.count( name ) == 0 ) {
+            //     varmap._table[name] = offset;
+            //     offset -= 4;
+            // }
+            if ( name.size() > 7 && name.substr( 0, 7 ) == "tmp_int" ) continue;
+            if ( name.size() >= 2 && name.substr( name.size() - 2, 2 ) == "_0" ) {
+                continue;
+            }
+            if ( name == "null" ) continue;
+            if ( name.size() < 2 || name.size() >= 2 && name[name.size() - 2] != '_' ) continue;
+            if ( name.size() > 0 && varmap._table.count( name ) == 0 ) {
                 varmap._table[name] = offset;
                 offset -= 4;
             }
@@ -681,13 +920,115 @@ void backend::Generator::cal_seg( const Function &function ) {
                 } ) {
             string name = operand.name;
             if ( name.size() > 7 && name.substr( 0, 7 ) == "tmp_int" && map_seg.count( name ) == 0 ) {
-                map_seg[name].first = instdex;
+                map_seg[name].first = map_seg[name].second = instdex;
             } else if ( name.size() > 7 && name.substr( 0, 7 ) == "tmp_int" ) {
                 map_seg[name].second = instdex;
             }
         }
         instdex++;
     }
+}
+void backend::Generator::do_lss( Instruction inst ) {
+    get_reg_assign( inst.op1, "t5" );
+    get_reg_assign( inst.op2, "t4" );
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SLT;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_leq( Instruction inst ) {
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SLT;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_gtr( Instruction inst ) {
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SLT;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_geq( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SLT;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_eq( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SUB;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_neq( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SUB;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_not( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::SEQZ;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    rvinst.rs1 = rvinst.rd;
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_and( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::AND;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
+}
+void backend::Generator::do_or( Instruction inst ) {
+    rv_inst rvinst;
+    rvinst.op = rvOPCODE::OR;
+    rvinst.rd = get_reg( inst.des, "a5" );
+    get_reg_assign( inst.op2, "t5" );
+    get_reg_assign( inst.op1, "t4" );
+    rvinst.rs1 = "t5";
+    rvinst.rs2 = "t4";
+    vec_rv_inst.push_back( rvinst );
 }
 string rv::rv_inst::draw() const {
     string ans = "    " + rv::toString( this->op );
@@ -721,6 +1062,9 @@ string rv::rv_inst::draw() const {
     case rvOPCODE::J:
         ans += "    ra";
         break;
+    case rvOPCODE::AND:
+    case rvOPCODE::OR:
+    case rvOPCODE::SLT:
     case rvOPCODE::REM:
     case rvOPCODE::SUB:
     case rvOPCODE::DIV:
@@ -732,8 +1076,23 @@ string rv::rv_inst::draw() const {
     case rvOPCODE::SLLI:
         ans += "    " + this->rd + "," + this->rs1 + "," + this->imm;
         break;
+    case rvOPCODE::CALL:
+        ans += "    " + this->rd;
+        break;
+    case rvOPCODE::LABEL:
+        ans = this->label;
+        break;
+    case rvOPCODE::JAL:
+        ans += "    " + this->label;
+        break;
+    case rvOPCODE::BNE:
+        ans += "    " + this->rs1 + "," + this->rs2 + "," + this->label;
+        break;
     case rvOPCODE::FUCKIN:
     case rvOPCODE::FUCKOUT:
+        break;
+    case rvOPCODE::SEQZ:
+        ans += "    " + this->rd + "," + this->rs1;
         break;
     default:
         assert( 0 );
@@ -790,6 +1149,30 @@ string rv::toString( rvOPCODE r ) {
         break;
     case rvOPCODE::REM:
         return "rem";
+        break;
+    case rvOPCODE::CALL:
+        return "call";
+        break;
+    case rvOPCODE::JAL:
+        return "j";
+        break;
+    case rvOPCODE::BNE:
+        return "bne";
+        break;
+    case rvOPCODE::LABEL:
+        return "label";
+        break;
+    case rvOPCODE::SLT:
+        return "slt";
+        break;
+    case rvOPCODE::SEQZ:
+        return "seqz";
+        break;
+    case rvOPCODE::AND:
+        return "and";
+        break;
+    case rvOPCODE::OR:
+        return "or";
         break;
     default:
         cout << int( r ) << endl;
