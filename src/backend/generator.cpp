@@ -168,7 +168,7 @@ void backend::Generator::add_store_s0() {
 }
 void backend::Generator::alloc_label_function( const Function &function ) {
     map_line_label.clear();
-    int ldex = 1;
+    static int ldex = 1;
     for ( int i = 0; i < function.InstVec.size(); i++ ) {
         Instruction &inst = *function.InstVec[i];
         if ( inst.op == Operator::_goto ) {
@@ -350,10 +350,14 @@ void backend::Generator::do_call( CallInst inst ) {
         move_func_result( inst.des.name );
         return;
     }
+    set<string> single;
+    single.clear();
     for ( pair<string, string> kv : map_tmp_register ) {
         string tmp = kv.first;
         string reg = kv.second;
+        if ( single.count( reg ) ) continue;
         gen_sw( reg, 1, 0 );
+        single.insert( reg );
     }
     // store params
     int offset = -12;
@@ -371,7 +375,7 @@ void backend::Generator::do_call( CallInst inst ) {
         }
         rv_inst rvinst;
         rvinst.op = rvOPCODE::SW;
-        rvinst.rs2 = get_reg_no_liter( param.name, "a5" );
+        rvinst.rs2 = get_reg_no_liter( param, "a5" );
         rvinst.rs1 = "sp";
         rvinst.imm = to_string( offset );
         vec_rv_inst.push_back( rvinst );
@@ -380,10 +384,13 @@ void backend::Generator::do_call( CallInst inst ) {
 // call func_name
     call_func_name( inst.op1.name );
 // lw s
+    single.clear();
     for ( pair<string, string> kv : map_tmp_register ) {
         string tmp = kv.first;
         string reg = kv.second;
+        if ( single.count( reg ) ) continue;
         gen_lw( reg );
+        single.insert( reg );
     }
 // mov tmp a0
     move_func_result( inst.des.name );
@@ -965,8 +972,8 @@ void backend::Generator::do_geq( Instruction inst ) {
     rv_inst rvinst;
     rvinst.op = rvOPCODE::SLT;
     rvinst.rd = get_reg( inst.des, "a5" );
-    get_reg_assign( inst.op2, "t5" );
-    get_reg_assign( inst.op1, "t4" );
+    get_reg_assign( inst.op1, "t5" );
+    get_reg_assign( inst.op2, "t4" );
     rvinst.rs1 = "t5";
     rvinst.rs2 = "t4";
     vec_rv_inst.push_back( rvinst );
@@ -1007,7 +1014,7 @@ void backend::Generator::do_not( Instruction inst ) {
     rv_inst rvinst;
     rvinst.op = rvOPCODE::SEQZ;
     rvinst.rd = get_reg( inst.des, "a5" );
-    rvinst.rs1 = rvinst.rd;
+    rvinst.rs1 = get_reg( inst.op1, "a5" );
     vec_rv_inst.push_back( rvinst );
 }
 void backend::Generator::do_and( Instruction inst ) {

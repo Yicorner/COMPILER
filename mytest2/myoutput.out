@@ -1,43 +1,41 @@
 void global_func()
-	0: return null
+	0: mov a_0, 0
+	1: mov b_0, 0
+	2: mov d_0, 0
+	3: return null
+end
+
+int set_a(int val_1)
+	0: mov a_0, val_1
+	1: return a_0
+	2: return 0
+end
+
+int set_b(int val_1)
+	0: mov b_0, val_1
+	1: return b_0
+	2: return 0
+end
+
+int set_d(int val_1)
+	0: mov d_0, val_1
+	1: return d_0
+	2: return 0
 end
 
 int main()
 	0: call tmp_int_0, global_func()
-	1: alloc a_1, 8
-	2: store 0, a_1, 1
-	3: store 0, a_1, 2
-	4: store 0, a_1, 3
-	5: store 0, a_1, 4
-	6: store 0, a_1, 5
-	7: store 0, a_1, 6
-	8: store 0, a_1, 7
-	9: alloc b_1, 8
-	10: store 1, b_1, 0
-	11: store 2, b_1, 1
-	12: store 3, b_1, 2
-	13: store 4, b_1, 3
-	14: store 5, b_1, 4
-	15: store 6, b_1, 5
-	16: store 7, b_1, 6
-	17: store 8, b_1, 7
-	18: mul tmp_int_1, 2, 3
-	19: add tmp_int_1, tmp_int_1, 1
-	20: load tmp_int_2, b_1, tmp_int_1
-	21: mul tmp_int_3, 2, 0
-	22: add tmp_int_3, tmp_int_3, 0
-	23: load tmp_int_4, b_1, tmp_int_3
-	24: mul tmp_int_5, 2, 0
-	25: add tmp_int_5, tmp_int_5, 1
-	26: load tmp_int_6, b_1, tmp_int_5
-	27: mul tmp_int_7, 2, 2
-	28: add tmp_int_7, tmp_int_7, 0
-	29: load tmp_int_8, b_1, tmp_int_7
-	30: add tmp_int_9, tmp_int_2, tmp_int_4
-	31: add tmp_int_10, tmp_int_9, tmp_int_6
-	32: add tmp_int_11, tmp_int_10, tmp_int_8
-	33: return tmp_int_11
-	34: return 0
+	1: geq tmp_int_3, 16, 0
+	2: mov tmp_int_4, tmp_int_3
+	3: mov tmp_int_5, tmp_int_4
+	4: if tmp_int_5 goto [pc, 2]
+	5: goto [pc, 2]
+	6: call tmp_int_6, putch(65)
+	7: return 0
+	8: return 0
 end
 
 GVT:
+	a_0 int 0
+	b_0 int 0
+	d_0 int 0
