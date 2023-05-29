@@ -21,6 +21,7 @@ backend::Generator::Generator( ir::Program &p, std::ofstream &f ): program( p ),
 
 void backend::Generator::gen() {
     set_reg.insert( "a0" );
+    set_reg.insert( "a1" );
     set_reg.insert( "s0" );
     set_reg.insert( "s1" );
     set_reg.insert( "s2" );
@@ -191,6 +192,7 @@ void backend::Generator::gen_func( const Function &function, string back ) {
     out( map_line_label );
     out( varmap._table );
     out( map_tmp_register );
+    out( varmap._ptrTable );
     fout << "\t.globl	" << function.name << endl;
     fout << "\t.type	" << function.name << ", @function" << endl;
     fout << function.name << ":" << endl;
@@ -300,8 +302,8 @@ void backend::Generator::do_goto( Instruction inst, int line ) {
     }
 }
 void backend::Generator::get_reg_assign( Operand operand, string reg ) {
-    if ( operand.type != Type::IntLiteral && !is_tmp( operand.name ) ) {
-        get_reg( operand, reg );;
+    if ( operand.type != Type::IntLiteral && !is_tmp( operand.name ) && !set_reg.count( operand.name ) ) {
+        get_reg( operand, reg );
     } else {
         Instruction mv = {operand, {}, {reg, Type::Int}, Operator::mov};
         do_move( mv );
@@ -337,14 +339,15 @@ void backend::Generator::get_ptr_addr_a5( Operand param ) {
 }
 void backend::Generator::do_call( CallInst inst ) {
     if ( libfunc.count( inst.op1.name ) ) {
+        int adex = 0;
         for ( Operand param : inst.argumentList ) {
-            int adex = 0;
             string desreg = "a" + to_string( adex++ );
             if ( param.type == Type::IntPtr ) {
                 get_ptr_addr_a5( param );
                 param = {"a5", Type::Int};
             }
             get_reg_assign( param, desreg );
+            cout << param.name << " " << desreg << endl;
         }
         call_func_name( inst.op1.name );
         move_func_result( inst.des.name );
@@ -364,6 +367,11 @@ void backend::Generator::do_call( CallInst inst ) {
     for ( Operand param : inst.argumentList ) {
         if ( param.type == Type::IntPtr ) {
             get_ptr_addr_a5( param );
+            // if ( varmap._local_arr_len.count( param.name ) ) {
+            //     int len = varmap._local_arr_len[param.name];
+            //     offset -= ( len - 1 ) * 4;
+            //     out( param.name, offset, len );
+            // }
             rv_inst rvinst;
             rvinst.op = rvOPCODE::SW;
             rvinst.rs2 = "a5";
@@ -859,6 +867,7 @@ void backend::Generator::do_line_tmp( const Function &function ) {
 int backend::Generator::alloc_all_addr( const Function &function, string back ) {
     varmap._table.clear();
     varmap._ptrTable.clear();
+    varmap._local_arr_len.clear();
     int offset = -8;
     map_s_reg_to_addr.clear();
     map_s_reg_to_addr["s0"] = -4;
@@ -868,9 +877,10 @@ int backend::Generator::alloc_all_addr( const Function &function, string back ) 
     for ( Operand operand : function.ParameterList ) {
         string name = operand.name;
         if ( name.size() > 7 && name.substr( 0, 7 ) == "tmp_int" ) continue;
-        if ( name.size() >= 2 && name.substr( name.size() - 2, 2 ) == "_1" && varmap._table.count( name ) == 0 ) {
+        if ( name.size() >= 2 && name.substr( name.size() - 2, 2 ) == "_1" && varmap._ptrTable.count( name ) == 0 ) {
             if ( operand.type == Type::IntPtr ) {
                 varmap._ptrTable[name] = offset;
+                out( "ptr", name, offset );
                 offset -= 4;
                 continue;
             }
@@ -892,6 +902,8 @@ int backend::Generator::alloc_all_addr( const Function &function, string back ) 
                 int len = eval_int( inst->op1.name );
                 offset -= ( len - 1 ) * 4;
                 varmap._table[inst->des.name] = offset;
+                varmap._local_arr_len[inst->des.name] = len;
+                out( "alloc", inst->des.name, offset );
                 offset -= 4;
             }
             continue;
@@ -910,8 +922,9 @@ int backend::Generator::alloc_all_addr( const Function &function, string back ) 
             }
             if ( name == "null" ) continue;
             if ( name.size() < 2 || name.size() >= 2 && name[name.size() - 2] != '_' ) continue;
-            if ( name.size() > 0 && varmap._table.count( name ) == 0 ) {
+            if ( name.size() > 0 && varmap._table.count( name ) == 0 && varmap._ptrTable.count( name ) == 0 ) {
                 varmap._table[name] = offset;
+                out( "not ptr", name, offset );
                 offset -= 4;
             }
         }

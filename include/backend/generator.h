@@ -18,6 +18,8 @@ using rv::rvOPCODE;
 struct stackVarMap {
     std::map<string, int> _table;
     std::map<string, int> _ptrTable;
+    std::map<std::string, int> _local_arr_len;
+
     /**
      * @brief find the addr of a ir::Operand
      * @return the offset

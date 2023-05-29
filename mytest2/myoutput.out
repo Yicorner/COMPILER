@@ -1,41 +1,97 @@
 void global_func()
-	0: mov a_0, 0
-	1: mov b_0, 0
-	2: mov d_0, 0
-	3: return null
+	0: mov n_0, 0
+	1: return null
 end
 
-int set_a(int val_1)
-	0: mov a_0, val_1
-	1: return a_0
-	2: return 0
-end
-
-int set_b(int val_1)
-	0: mov b_0, val_1
-	1: return b_0
-	2: return 0
-end
-
-int set_d(int val_1)
-	0: mov d_0, val_1
-	1: return d_0
-	2: return 0
+int bubblesort(int* arr_1)
+	0: mov i_1, 0
+	1: mov j_1, 0
+	2: mov i_1, 0
+	3: sub tmp_int_0, n_0, 1
+	4: lss tmp_int_1, i_1, tmp_int_0
+	5: mov tmp_int_2, tmp_int_1
+	6: mov tmp_int_3, tmp_int_2
+	7: if tmp_int_3 goto [pc, 2]
+	8: goto [pc, 37]
+	9: mov j_1, 0
+	10: sub tmp_int_4, n_0, i_1
+	11: sub tmp_int_5, tmp_int_4, 1
+	12: lss tmp_int_6, j_1, tmp_int_5
+	13: mov tmp_int_7, tmp_int_6
+	14: mov tmp_int_8, tmp_int_7
+	15: if tmp_int_8 goto [pc, 2]
+	16: goto [pc, 26]
+	17: mov tmp_int_9, j_1
+	18: load tmp_int_10, arr_1, tmp_int_9
+	19: add tmp_int_11, j_1, 1
+	20: mov tmp_int_12, tmp_int_11
+	21: load tmp_int_13, arr_1, tmp_int_12
+	22: gtr tmp_int_14, tmp_int_10, tmp_int_13
+	23: mov tmp_int_15, tmp_int_14
+	24: mov tmp_int_16, tmp_int_15
+	25: if tmp_int_16 goto [pc, 2]
+	26: goto [pc, 13]
+	27: mov tmp_4, 0
+	28: add tmp_int_17, j_1, 1
+	29: mov tmp_int_18, tmp_int_17
+	30: load tmp_int_19, arr_1, tmp_int_18
+	31: mov tmp_4, tmp_int_19
+	32: add tmp_int_20, j_1, 1
+	33: mov tmp_int_21, tmp_int_20
+	34: mov tmp_int_23, j_1
+	35: load tmp_int_24, arr_1, tmp_int_23
+	36: store tmp_int_24, arr_1, tmp_int_21
+	37: mov tmp_int_25, j_1
+	38: store tmp_4, arr_1, tmp_int_25
+	39: add tmp_int_27, j_1, 1
+	40: mov j_1, tmp_int_27
+	41: goto [pc, -31]
+	42: add tmp_int_28, i_1, 1
+	43: mov i_1, tmp_int_28
+	44: goto [pc, -41]
+	45: return 0
+	46: return 0
 end
 
 int main()
-	0: call tmp_int_0, global_func()
-	1: geq tmp_int_3, 16, 0
-	2: mov tmp_int_4, tmp_int_3
-	3: mov tmp_int_5, tmp_int_4
-	4: if tmp_int_5 goto [pc, 2]
-	5: goto [pc, 2]
-	6: call tmp_int_6, putch(65)
-	7: return 0
-	8: return 0
+	0: call tmp_int_29, global_func()
+	1: mov n_0, 10
+	2: alloc a_1, 10
+	3: store 0, a_1, 0
+	4: store 0, a_1, 1
+	5: store 0, a_1, 2
+	6: store 0, a_1, 3
+	7: store 0, a_1, 4
+	8: store 0, a_1, 5
+	9: store 0, a_1, 6
+	10: store 0, a_1, 7
+	11: store 0, a_1, 8
+	12: store 0, a_1, 9
+	13: mov tmp_int_30, 0
+	14: store 4, a_1, tmp_int_30
+	15: mov tmp_int_32, 1
+	16: store 3, a_1, tmp_int_32
+	17: mov tmp_int_34, 2
+	18: store 9, a_1, tmp_int_34
+	19: mov tmp_int_36, 3
+	20: store 2, a_1, tmp_int_36
+	21: mov tmp_int_38, 4
+	22: store 0, a_1, tmp_int_38
+	23: mov tmp_int_40, 5
+	24: store 1, a_1, tmp_int_40
+	25: mov tmp_int_42, 6
+	26: store 6, a_1, tmp_int_42
+	27: mov tmp_int_44, 7
+	28: store 5, a_1, tmp_int_44
+	29: mov tmp_int_46, 8
+	30: store 7, a_1, tmp_int_46
+	31: mov tmp_int_48, 9
+	32: store 8, a_1, tmp_int_48
+	33: mov i_1, 0
+	34: call tmp_int_50, bubblesort(a_1)
+	35: mov i_1, tmp_int_50
+	36: return 0
 end
 
 GVT:
-	a_0 int 0
-	b_0 int 0
-	d_0 int 0
+	n_0 int 0
