@@ -1,97 +1,321 @@
 void global_func()
-	0: mov n_0, 0
-	1: return null
+	0: store 0, array_0, 0
+	1: store 0, array_0, 1
+	2: store 0, array_0, 2
+	3: store 0, array_0, 3
+	4: store 0, array_0, 4
+	5: store 0, array_0, 5
+	6: store 0, array_0, 6
+	7: store 0, array_0, 7
+	8: store 0, array_0, 8
+	9: store 0, array_0, 9
+	10: store 0, array_0, 10
+	11: store 0, array_0, 11
+	12: store 0, array_0, 12
+	13: store 0, array_0, 13
+	14: store 0, array_0, 14
+	15: store 0, array_0, 15
+	16: store 0, array_0, 16
+	17: store 0, array_0, 17
+	18: store 0, array_0, 18
+	19: store 0, array_0, 19
+	20: store 0, array_0, 20
+	21: store 0, array_0, 21
+	22: store 0, array_0, 22
+	23: store 0, array_0, 23
+	24: store 0, array_0, 24
+	25: store 0, array_0, 25
+	26: store 0, array_0, 26
+	27: store 0, array_0, 27
+	28: store 0, array_0, 28
+	29: store 0, array_0, 29
+	30: store 0, array_0, 30
+	31: store 0, array_0, 31
+	32: store 0, array_0, 32
+	33: store 0, array_0, 33
+	34: store 0, array_0, 34
+	35: store 0, array_0, 35
+	36: store 0, array_0, 36
+	37: store 0, array_0, 37
+	38: store 0, array_0, 38
+	39: store 0, array_0, 39
+	40: store 0, array_0, 40
+	41: store 0, array_0, 41
+	42: store 0, array_0, 42
+	43: store 0, array_0, 43
+	44: store 0, array_0, 44
+	45: store 0, array_0, 45
+	46: store 0, array_0, 46
+	47: store 0, array_0, 47
+	48: store 0, array_0, 48
+	49: store 0, array_0, 49
+	50: store 0, array_0, 50
+	51: store 0, array_0, 51
+	52: store 0, array_0, 52
+	53: store 0, array_0, 53
+	54: store 0, array_0, 54
+	55: store 0, array_0, 55
+	56: store 0, array_0, 56
+	57: store 0, array_0, 57
+	58: store 0, array_0, 58
+	59: store 0, array_0, 59
+	60: store 0, array_0, 60
+	61: store 0, array_0, 61
+	62: store 0, array_0, 62
+	63: store 0, array_0, 63
+	64: store 0, array_0, 64
+	65: store 0, array_0, 65
+	66: store 0, array_0, 66
+	67: store 0, array_0, 67
+	68: store 0, array_0, 68
+	69: store 0, array_0, 69
+	70: store 0, array_0, 70
+	71: store 0, array_0, 71
+	72: store 0, array_0, 72
+	73: store 0, array_0, 73
+	74: store 0, array_0, 74
+	75: store 0, array_0, 75
+	76: store 0, array_0, 76
+	77: store 0, array_0, 77
+	78: store 0, array_0, 78
+	79: store 0, array_0, 79
+	80: store 0, array_0, 80
+	81: store 0, array_0, 81
+	82: store 0, array_0, 82
+	83: store 0, array_0, 83
+	84: store 0, array_0, 84
+	85: store 0, array_0, 85
+	86: store 0, array_0, 86
+	87: store 0, array_0, 87
+	88: store 0, array_0, 88
+	89: store 0, array_0, 89
+	90: store 0, array_0, 90
+	91: store 0, array_0, 91
+	92: store 0, array_0, 92
+	93: store 0, array_0, 93
+	94: store 0, array_0, 94
+	95: store 0, array_0, 95
+	96: store 0, array_0, 96
+	97: store 0, array_0, 97
+	98: store 0, array_0, 98
+	99: store 0, array_0, 99
+	100: store 0, array_0, 100
+	101: store 0, array_0, 101
+	102: store 0, array_0, 102
+	103: store 0, array_0, 103
+	104: store 0, array_0, 104
+	105: store 0, array_0, 105
+	106: store 0, array_0, 106
+	107: store 0, array_0, 107
+	108: store 0, array_0, 108
+	109: store 0, array_0, 109
+	110: mov n_0, 0
+	111: return null
 end
 
-int bubblesort(int* arr_1)
-	0: mov i_1, 0
-	1: mov j_1, 0
-	2: mov i_1, 0
-	3: sub tmp_int_0, n_0, 1
-	4: lss tmp_int_1, i_1, tmp_int_0
-	5: mov tmp_int_2, tmp_int_1
-	6: mov tmp_int_3, tmp_int_2
-	7: if tmp_int_3 goto [pc, 2]
-	8: goto [pc, 37]
-	9: mov j_1, 0
-	10: sub tmp_int_4, n_0, i_1
-	11: sub tmp_int_5, tmp_int_4, 1
-	12: lss tmp_int_6, j_1, tmp_int_5
-	13: mov tmp_int_7, tmp_int_6
-	14: mov tmp_int_8, tmp_int_7
-	15: if tmp_int_8 goto [pc, 2]
-	16: goto [pc, 26]
-	17: mov tmp_int_9, j_1
-	18: load tmp_int_10, arr_1, tmp_int_9
-	19: add tmp_int_11, j_1, 1
-	20: mov tmp_int_12, tmp_int_11
-	21: load tmp_int_13, arr_1, tmp_int_12
-	22: gtr tmp_int_14, tmp_int_10, tmp_int_13
-	23: mov tmp_int_15, tmp_int_14
-	24: mov tmp_int_16, tmp_int_15
-	25: if tmp_int_16 goto [pc, 2]
-	26: goto [pc, 13]
-	27: mov tmp_4, 0
-	28: add tmp_int_17, j_1, 1
-	29: mov tmp_int_18, tmp_int_17
-	30: load tmp_int_19, arr_1, tmp_int_18
-	31: mov tmp_4, tmp_int_19
-	32: add tmp_int_20, j_1, 1
-	33: mov tmp_int_21, tmp_int_20
-	34: mov tmp_int_23, j_1
-	35: load tmp_int_24, arr_1, tmp_int_23
-	36: store tmp_int_24, arr_1, tmp_int_21
-	37: mov tmp_int_25, j_1
-	38: store tmp_4, arr_1, tmp_int_25
-	39: add tmp_int_27, j_1, 1
-	40: mov j_1, tmp_int_27
-	41: goto [pc, -31]
-	42: add tmp_int_28, i_1, 1
-	43: mov i_1, tmp_int_28
-	44: goto [pc, -41]
-	45: return 0
-	46: return 0
+void init(int n_1)
+	0: def i_1, 1
+	1: mul tmp_int_0, n_1, n_1
+	2: add tmp_int_1, tmp_int_0, 1
+	3: leq tmp_int_2, i_1, tmp_int_1
+	4: mov tmp_int_3, tmp_int_2
+	5: mov tmp_int_4, tmp_int_3
+	6: if tmp_int_4 goto [pc, 2]
+	7: goto [pc, 6]
+	8: mov tmp_int_5, i_1
+	9: store -1, array_0, tmp_int_5
+	10: add tmp_int_7, i_1, 1
+	11: mov i_1, tmp_int_7
+	12: goto [pc, -11]
+	13: return null
+end
+
+int findfa(int a_1)
+	0: mov tmp_int_8, a_1
+	1: load tmp_int_9, array_0, tmp_int_8
+	2: eq tmp_int_10, tmp_int_9, a_1
+	3: mov tmp_int_11, tmp_int_10
+	4: if tmp_int_11 goto [pc, 2]
+	5: goto [pc, 3]
+	6: return a_1
+	7: goto [pc, 9]
+	8: mov tmp_int_12, a_1
+	9: mov tmp_int_14, a_1
+	10: load tmp_int_15, array_0, tmp_int_14
+	11: call tmp_int_16, findfa(tmp_int_15)
+	12: store tmp_int_16, array_0, tmp_int_12
+	13: mov tmp_int_17, a_1
+	14: load tmp_int_18, array_0, tmp_int_17
+	15: return tmp_int_18
+	16: return 0
+end
+
+void mmerge(int a_1,int b_1)
+	0: call tmp_int_19, findfa(a_1)
+	1: def m_1, tmp_int_19
+	2: call tmp_int_20, findfa(b_1)
+	3: def n_1, tmp_int_20
+	4: neq tmp_int_21, m_1, n_1
+	5: mov tmp_int_22, tmp_int_21
+	6: if tmp_int_22 goto [pc, 2]
+	7: goto [pc, 3]
+	8: mov tmp_int_23, m_1
+	9: store n_1, array_0, tmp_int_23
+	10: return null
 end
 
 int main()
-	0: call tmp_int_29, global_func()
-	1: mov n_0, 10
-	2: alloc a_1, 10
-	3: store 0, a_1, 0
-	4: store 0, a_1, 1
-	5: store 0, a_1, 2
-	6: store 0, a_1, 3
-	7: store 0, a_1, 4
-	8: store 0, a_1, 5
-	9: store 0, a_1, 6
-	10: store 0, a_1, 7
-	11: store 0, a_1, 8
-	12: store 0, a_1, 9
-	13: mov tmp_int_30, 0
-	14: store 4, a_1, tmp_int_30
-	15: mov tmp_int_32, 1
-	16: store 3, a_1, tmp_int_32
-	17: mov tmp_int_34, 2
-	18: store 9, a_1, tmp_int_34
-	19: mov tmp_int_36, 3
-	20: store 2, a_1, tmp_int_36
-	21: mov tmp_int_38, 4
-	22: store 0, a_1, tmp_int_38
-	23: mov tmp_int_40, 5
-	24: store 1, a_1, tmp_int_40
-	25: mov tmp_int_42, 6
-	26: store 6, a_1, tmp_int_42
-	27: mov tmp_int_44, 7
-	28: store 5, a_1, tmp_int_44
-	29: mov tmp_int_46, 8
-	30: store 7, a_1, tmp_int_46
-	31: mov tmp_int_48, 9
-	32: store 8, a_1, tmp_int_48
-	33: mov i_1, 0
-	34: call tmp_int_50, bubblesort(a_1)
-	35: mov i_1, tmp_int_50
-	36: return 0
+	0: call tmp_int_25, global_func()
+	1: mov t_1, 0
+	2: mov m_1, 0
+	3: mov a_1, 0
+	4: mov b_1, 0
+	5: mov t_1, 1
+	6: mov tmp_int_26, t_1
+	7: if tmp_int_26 goto [pc, 2]
+	8: goto [pc, 139]
+	9: sub tmp_int_27, t_1, 1
+	10: mov t_1, tmp_int_27
+	11: mov n_0, 4
+	12: mov m_1, 10
+	13: def i_2, 0
+	14: def flag_2, 0
+	15: call tmp_int_28, init(n_0)
+	16: mul tmp_int_29, n_0, n_0
+	17: add tmp_int_30, tmp_int_29, 1
+	18: def k_2, tmp_int_30
+	19: lss tmp_int_31, i_2, m_1
+	20: mov tmp_int_32, tmp_int_31
+	21: mov tmp_int_33, tmp_int_32
+	22: if tmp_int_33 goto [pc, 2]
+	23: goto [pc, 117]
+	24: call tmp_int_34, getint()
+	25: mov a_1, tmp_int_34
+	26: call tmp_int_35, getint()
+	27: mov b_1, tmp_int_35
+	28: eq tmp_int_36, 0, flag_2
+	29: mov tmp_int_37, tmp_int_36
+	30: if tmp_int_37 goto [pc, 2]
+	31: goto [pc, 106]
+	32: sub tmp_int_38, a_1, 1
+	33: mul tmp_int_39, n_0, tmp_int_38
+	34: add tmp_int_40, tmp_int_39, b_1
+	35: def loc_4, tmp_int_40
+	36: mov tmp_int_41, loc_4
+	37: store loc_4, array_0, tmp_int_41
+	38: eq tmp_int_43, a_1, 1
+	39: mov tmp_int_44, tmp_int_43
+	40: if tmp_int_44 goto [pc, 2]
+	41: goto [pc, 4]
+	42: mov tmp_int_45, 0
+	43: store 0, array_0, tmp_int_45
+	44: call tmp_int_47, mmerge(loc_4, 0)
+	45: eq tmp_int_48, a_1, n_0
+	46: mov tmp_int_49, tmp_int_48
+	47: if tmp_int_49 goto [pc, 2]
+	48: goto [pc, 4]
+	49: mov tmp_int_50, k_2
+	50: store k_2, array_0, tmp_int_50
+	51: call tmp_int_52, mmerge(loc_4, k_2)
+	52: lss tmp_int_53, b_1, n_0
+	53: mov tmp_int_54, tmp_int_53
+	54: mov tmp_int_55, tmp_int_54
+	55: not tmp_int_56, tmp_int_55
+	56: if tmp_int_56 goto [pc, 8]
+	57: add tmp_int_57, loc_4, 1
+	58: mov tmp_int_58, tmp_int_57
+	59: load tmp_int_59, array_0, tmp_int_58
+	60: neq tmp_int_60, tmp_int_59, -1
+	61: mov tmp_int_61, tmp_int_60
+	62: and tmp_int_55, tmp_int_61, tmp_int_55
+	63: if tmp_int_55 goto [pc, 2]
+	64: goto [pc, 3]
+	65: add tmp_int_62, loc_4, 1
+	66: call tmp_int_63, mmerge(loc_4, tmp_int_62)
+	67: gtr tmp_int_64, b_1, 1
+	68: mov tmp_int_65, tmp_int_64
+	69: mov tmp_int_66, tmp_int_65
+	70: not tmp_int_67, tmp_int_66
+	71: if tmp_int_67 goto [pc, 8]
+	72: sub tmp_int_68, loc_4, 1
+	73: mov tmp_int_69, tmp_int_68
+	74: load tmp_int_70, array_0, tmp_int_69
+	75: neq tmp_int_71, tmp_int_70, -1
+	76: mov tmp_int_72, tmp_int_71
+	77: and tmp_int_66, tmp_int_72, tmp_int_66
+	78: if tmp_int_66 goto [pc, 2]
+	79: goto [pc, 3]
+	80: sub tmp_int_73, loc_4, 1
+	81: call tmp_int_74, mmerge(loc_4, tmp_int_73)
+	82: lss tmp_int_75, a_1, n_0
+	83: mov tmp_int_76, tmp_int_75
+	84: mov tmp_int_77, tmp_int_76
+	85: not tmp_int_78, tmp_int_77
+	86: if tmp_int_78 goto [pc, 8]
+	87: add tmp_int_79, loc_4, n_0
+	88: mov tmp_int_80, tmp_int_79
+	89: load tmp_int_81, array_0, tmp_int_80
+	90: neq tmp_int_82, tmp_int_81, -1
+	91: mov tmp_int_83, tmp_int_82
+	92: and tmp_int_77, tmp_int_83, tmp_int_77
+	93: if tmp_int_77 goto [pc, 2]
+	94: goto [pc, 3]
+	95: add tmp_int_84, loc_4, n_0
+	96: call tmp_int_85, mmerge(loc_4, tmp_int_84)
+	97: gtr tmp_int_86, a_1, 1
+	98: mov tmp_int_87, tmp_int_86
+	99: mov tmp_int_88, tmp_int_87
+	100: not tmp_int_89, tmp_int_88
+	101: if tmp_int_89 goto [pc, 8]
+	102: sub tmp_int_90, loc_4, n_0
+	103: mov tmp_int_91, tmp_int_90
+	104: load tmp_int_92, array_0, tmp_int_91
+	105: neq tmp_int_93, tmp_int_92, -1
+	106: mov tmp_int_94, tmp_int_93
+	107: and tmp_int_88, tmp_int_94, tmp_int_88
+	108: if tmp_int_88 goto [pc, 2]
+	109: goto [pc, 3]
+	110: sub tmp_int_95, loc_4, n_0
+	111: call tmp_int_96, mmerge(loc_4, tmp_int_95)
+	112: mov tmp_int_97, 0
+	113: load tmp_int_98, array_0, tmp_int_97
+	114: neq tmp_int_99, tmp_int_98, -1
+	115: mov tmp_int_100, tmp_int_99
+	116: not tmp_int_101, tmp_int_100
+	117: if tmp_int_101 goto [pc, 14]
+	118: mov tmp_int_102, k_2
+	119: load tmp_int_103, array_0, tmp_int_102
+	120: neq tmp_int_104, tmp_int_103, -1
+	121: mov tmp_int_105, tmp_int_104
+	122: not tmp_int_106, tmp_int_105
+	123: if tmp_int_106 goto [pc, 8]
+	124: call tmp_int_107, findfa(0)
+	125: call tmp_int_108, findfa(k_2)
+	126: eq tmp_int_109, tmp_int_107, tmp_int_108
+	127: mov tmp_int_110, tmp_int_109
+	128: and tmp_int_105, tmp_int_110, tmp_int_105
+	129: and tmp_int_100, tmp_int_105, tmp_int_100
+	130: if tmp_int_100 goto [pc, 2]
+	131: goto [pc, 6]
+	132: mov flag_2, 1
+	133: add tmp_int_111, i_2, 1
+	134: def tmp_5, tmp_int_111
+	135: call tmp_int_112, putint(tmp_5)
+	136: call tmp_int_113, putch(10)
+	137: add tmp_int_114, i_2, 1
+	138: mov i_2, tmp_int_114
+	139: goto [pc, -120]
+	140: eq tmp_int_115, 0, flag_2
+	141: mov tmp_int_116, tmp_int_115
+	142: if tmp_int_116 goto [pc, 2]
+	143: goto [pc, 3]
+	144: call tmp_int_117, putint(-1)
+	145: call tmp_int_118, putch(10)
+	146: goto [pc, -140]
+	147: return 0
+	148: return 0
 end
 
 GVT:
+	array_0 int* 110
 	n_0 int 0

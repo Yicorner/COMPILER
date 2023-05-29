@@ -627,7 +627,9 @@ void backend::Generator::do_jr_ra() {
 }
 void backend::Generator::do_return( Instruction inst, int offset ) {
     Operand op1 = inst.op1;
-    do_move( Instruction( op1, {}, {"a0", Type::Int}, Operator::mov ) );
+    if ( op1.name != "null" ) {
+        do_move( Instruction( op1, {}, {"a0", Type::Int}, Operator::mov ) );
+    }
     gen_lw( "ra" );
     gen_lw( "s0" );
     gen_addi( "sp", "sp", to_string( -offset ) );

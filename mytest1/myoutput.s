@@ -1,6 +1,122 @@
 	.file	"ref.c"
 	.option nopic
 	.text
+	.globl	array_0
+	.data
+	.align 2
+	.type	array_0, @object
+	.size	array_0, 440
+array_0:
+	.word	0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
+	.word   0
 	.globl	n_0
 	.data
 	.align 2
@@ -10,272 +126,648 @@ n_0:
 	.word	0
 	.text
 	.align	1
-	.globl	bubblesort
-	.type	bubblesort, @function
-bubblesort:
+	.globl	init
+	.type	init, @function
+init:
     sw	s0,-4(sp)
     sw	ra,-8(sp)
-    addi	sp,sp,-136
-    addi	s0,sp,136
-    li	a5,0
-    sw	a5,-124(s0)
-    li	a5,0
-    sw	a5,-128(s0)
-    li	a5,0
-    sw	a5,-124(s0)
-.L8:
-    lui    a5,%hi(n_0)
-    lw	a5,%lo(n_0)(a5)
-    addi	s1,a5,-1
-    lw	t5,-124(s0)
-    mv    t4,s1
-    slt    s10,t5,t4
-    mv    s1,s10
+    addi	sp,sp,-48
+    addi	s0,sp,48
+    li	a5,1
+    sw	a5,-44(s0)
+.L3:
+    lw	a4,-12(s0)
+    lw	a3,-12(s0)
+    mul    s1,a4,a3
+    addi	s10,s1,1
+    mv    t5,s10
+    lw	t4,-44(s0)
+    slt    s1,t5,t4
+    seqz    s1,s1
     mv    s10,s1
-    bne    s10,zero,.L1
+    mv    s1,s10
+    bne    s1,zero,.L1
     j    .L2
 .L1:
-    li	a5,0
-    sw	a5,-128(s0)
-.L7:
-    lui    a5,%hi(n_0)
-    lw	a5,%lo(n_0)(a5)
-    lw	a4,-124(s0)
-    sub    s1,a5,a4
-    addi	s10,s1,-1
-    lw	t5,-128(s0)
-    mv    t4,s10
-    slt    s1,t5,t4
-    mv    s10,s1
-    mv    s1,s10
-    bne    s1,zero,.L3
-    j    .L4
-.L3:
-    lw	a5,-128(s0)
+    lw	a5,-44(s0)
     mv    s1,a5
     slli    a4,s1,2
-    lw	a3,-12(s0)
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    li	a5,-1
+    sw	a5,0(a3)
+    lw	a5,-44(s0)
+    addi	s1,a5,1
+    mv    a5,s1
+    sw	a5,-44(s0)
+    j    .L3
+.L2:
+    lw	ra,-8(s0)
+    lw	s0,-4(s0)
+    addi	sp,sp,48
+    jr    ra
+	.size	init, .-init
+	.globl	findfa
+	.type	findfa, @function
+findfa:
+    sw	s0,-4(sp)
+    sw	ra,-8(sp)
+    addi	sp,sp,-56
+    addi	s0,sp,56
+    lw	a5,-12(s0)
+    mv    s1,a5
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
     add    a3,a3,a4
     lw	s10,0(a3)
-    lw	a5,-128(s0)
-    addi	s1,a5,1
-    mv    s11,s1
-    slli    a4,s11,2
-    lw	a3,-12(s0)
-    add    a3,a3,a4
-    lw	s1,0(a3)
-    mv    t5,s1
+    lw	t5,-12(s0)
     mv    t4,s10
-    slt    s11,t5,t4
-    mv    s1,s11
+    sub    s1,t5,t4
+    seqz    s1,s1
     mv    s10,s1
-    bne    s10,zero,.L5
+    bne    s10,zero,.L4
+    j    .L5
+.L4:
+    lw	a5,-12(s0)
+    mv    a0,a5
+    lw	ra,-8(s0)
+    lw	s0,-4(s0)
+    addi	sp,sp,56
+    jr    ra
     j    .L6
 .L5:
-    li	a5,0
-    sw	a5,-132(s0)
-    lw	a5,-128(s0)
-    addi	s1,a5,1
-    mv    s10,s1
-    slli    a4,s10,2
-    lw	a3,-12(s0)
-    add    a3,a3,a4
-    lw	s1,0(a3)
-    mv    a5,s1
-    sw	a5,-132(s0)
-    lw	a5,-128(s0)
-    addi	s1,a5,1
-    mv    s10,s1
-    lw	a5,-128(s0)
+    lw	a5,-12(s0)
     mv    s1,a5
-    slli    a4,s1,2
-    lw	a3,-12(s0)
+    lw	a5,-12(s0)
+    mv    s10,a5
+    slli    a4,s10,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
     add    a3,a3,a4
     lw	s11,0(a3)
-    slli    a4,s10,2
-    lw	a3,-12(s0)
+    sw	s1,-48(s0)
+    sw	s10,-52(s0)
+    sw	s11,-32(s0)
+    sw	s11,-12(sp)
+    call    findfa
+    lw	s1,-48(s0)
+    lw	s10,-52(s0)
+    lw	s11,-32(s0)
+    mv    s10,a0
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
     add    a3,a3,a4
-    sw	s11,0(a3)
-    lw	a5,-128(s0)
+    sw	s10,0(a3)
+    lw	a5,-12(s0)
     mv    s1,a5
     slli    a4,s1,2
-    lw	a3,-12(s0)
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
     add    a3,a3,a4
-    lw	a5,-132(s0)
-    sw	a5,0(a3)
+    lw	s10,0(a3)
+    mv    a0,s10
+    lw	ra,-8(s0)
+    lw	s0,-4(s0)
+    addi	sp,sp,56
+    jr    ra
 .L6:
-    lw	a5,-128(s0)
-    addi	s1,a5,1
+    li	a0,0
+    lw	ra,-8(s0)
+    lw	s0,-4(s0)
+    addi	sp,sp,56
+    jr    ra
+	.size	findfa, .-findfa
+	.globl	mmerge
+	.type	mmerge, @function
+mmerge:
+    sw	s0,-4(sp)
+    sw	ra,-8(sp)
+    addi	sp,sp,-48
+    addi	s0,sp,48
+    sw	s1,-36(s0)
+    sw	s10,-32(s0)
+    lw	a5,-12(s0)
+    sw	a5,-12(sp)
+    call    findfa
+    lw	s1,-36(s0)
+    lw	s10,-32(s0)
+    mv    s1,a0
     mv    a5,s1
-    sw	a5,-128(s0)
-    j    .L7
-.L4:
-    lw	a5,-124(s0)
-    addi	s1,a5,1
+    sw	a5,-40(s0)
+    sw	s1,-36(s0)
+    sw	s10,-32(s0)
+    lw	a5,-16(s0)
+    sw	a5,-12(sp)
+    call    findfa
+    lw	s1,-36(s0)
+    lw	s10,-32(s0)
+    mv    s1,a0
     mv    a5,s1
-    sw	a5,-124(s0)
+    sw	a5,-44(s0)
+    lw	t5,-44(s0)
+    lw	t4,-40(s0)
+    sub    s1,t5,t4
+    seqz    s1,s1
+    seqz    s1,s1
+    mv    s10,s1
+    bne    s10,zero,.L7
     j    .L8
-.L2:
-    li	a0,0
+.L7:
+    lw	a5,-40(s0)
+    mv    s1,a5
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	a5,-44(s0)
+    sw	a5,0(a3)
+.L8:
     lw	ra,-8(s0)
     lw	s0,-4(s0)
-    addi	sp,sp,136
+    addi	sp,sp,48
     jr    ra
-    li	a0,0
-    lw	ra,-8(s0)
-    lw	s0,-4(s0)
-    addi	sp,sp,136
-    jr    ra
-	.size	bubblesort, .-bubblesort
+	.size	mmerge, .-mmerge
 	.globl	main
 	.type	main, @function
 main:
     sw	s0,-4(sp)
     sw	ra,-8(sp)
-    addi	sp,sp,-108
-    addi	s0,sp,108
-    li	a5,10
+    addi	sp,sp,-412
+    addi	s0,sp,412
+    li	a5,0
+    sw	a5,-376(s0)
+    li	a5,0
+    sw	a5,-380(s0)
+    li	a5,0
+    sw	a5,-384(s0)
+    li	a5,0
+    sw	a5,-388(s0)
+    li	a5,1
+    sw	a5,-376(s0)
+.L38:
+    lw	a5,-376(s0)
+    mv    s1,a5
+    bne    s1,zero,.L9
+    j    .L10
+.L9:
+    lw	a5,-376(s0)
+    addi	s1,a5,-1
+    mv    a5,s1
+    sw	a5,-376(s0)
+    li	a5,4
     lui    a6,%hi(n_0)
     sw	a5,%lo(n_0)(a6)
+    li	a5,10
+    sw	a5,-380(s0)
     li	a5,0
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
+    sw	a5,-392(s0)
     li	a5,0
-    sw	a5,0(a3)
-    li	a5,1
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,2
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,3
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,4
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,5
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,6
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,7
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,8
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	a5,9
-    slli    a4,a5,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	s1,0
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,4
-    sw	a5,0(a3)
-    li	s1,1
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,3
-    sw	a5,0(a3)
-    li	s1,2
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,9
-    sw	a5,0(a3)
-    li	s1,3
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,2
-    sw	a5,0(a3)
-    li	s1,4
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,0
-    sw	a5,0(a3)
-    li	s1,5
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,1
-    sw	a5,0(a3)
-    li	s1,6
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,6
-    sw	a5,0(a3)
-    li	s1,7
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,5
-    sw	a5,0(a3)
-    li	s1,8
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,7
-    sw	a5,0(a3)
-    li	s1,9
-    slli    a4,s1,2
-    addi	a3,a4,-100
-    add    a3,a3,s0
-    li	a5,8
-    sw	a5,0(a3)
-    li	a5,0
-    sw	a5,-104(s0)
-    sw	s1,-60(s0)
-    addi	a5,s0,-100
+    sw	a5,-396(s0)
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lui    a5,%hi(n_0)
+    lw	a5,%lo(n_0)(a5)
     sw	a5,-12(sp)
-    call    bubblesort
-    lw	s1,-60(s0)
+    call    init
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    lui    a3,%hi(n_0)
+    lw	a3,%lo(n_0)(a3)
+    mul    s1,a4,a3
+    addi	s10,s1,1
+    mv    a5,s10
+    sw	a5,-400(s0)
+.L35:
+    lw	t5,-392(s0)
+    lw	t4,-380(s0)
+    slt    s1,t5,t4
+    mv    s10,s1
+    mv    s1,s10
+    bne    s1,zero,.L11
+    j    .L12
+.L11:
+    call    getint
     mv    s1,a0
     mv    a5,s1
-    sw	a5,-104(s0)
-    li	a0,10
-    addi	a5,s0,-100
-    mv    a1,a5
-    call    putarray
+    sw	a5,-384(s0)
+    call    getint
     mv    s1,a0
+    mv    a5,s1
+    sw	a5,-388(s0)
+    lw	t5,-396(s0)
+    li	t4,0
+    sub    s1,t5,t4
+    seqz    s1,s1
+    mv    s10,s1
+    bne    s10,zero,.L13
+    j    .L14
+.L13:
+    lw	a5,-384(s0)
+    addi	s1,a5,-1
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    mul    s10,a4,s1
+    lw	a4,-388(s0)
+    add    s1,s10,a4
+    mv    a5,s1
+    sw	a5,-404(s0)
+    lw	a5,-404(s0)
+    mv    s1,a5
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	a5,-404(s0)
+    sw	a5,0(a3)
+    li	t5,1
+    lw	t4,-384(s0)
+    sub    s1,t5,t4
+    seqz    s1,s1
+    mv    s10,s1
+    bne    s10,zero,.L15
+    j    .L16
+.L15:
+    li	s1,0
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    li	a5,0
+    sw	a5,0(a3)
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    li	a5,0
+    sw	a5,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L16:
+    lui    t5,%hi(n_0)
+    lw	t5,%lo(n_0)(t5)
+    lw	t4,-384(s0)
+    sub    s1,t5,t4
+    seqz    s1,s1
+    mv    s10,s1
+    bne    s10,zero,.L17
+    j    .L18
+.L17:
+    lw	a5,-400(s0)
+    mv    s1,a5
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	a5,-400(s0)
+    sw	a5,0(a3)
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    lw	a5,-400(s0)
+    sw	a5,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L18:
+    lw	t5,-388(s0)
+    lui    t4,%hi(n_0)
+    lw	t4,%lo(n_0)(t4)
+    slt    s1,t5,t4
+    mv    s10,s1
+    mv    s1,s10
+    seqz    s10,s1
+    bne    s10,zero,.L19
+    lw	a5,-404(s0)
+    addi	s10,a5,1
+    mv    s11,s10
+    slli    a4,s11,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s10,0(a3)
+    li	t5,-1
+    mv    t4,s10
+    sub    s11,t5,t4
+    seqz    s11,s11
+    seqz    s11,s11
+    mv    s10,s11
+    mv    t5,s1
+    mv    t4,s10
+    and    s1,t5,t4
+    bne    s1,zero,.L20
+.L19:
+    j    .L21
+.L20:
+    lw	a5,-404(s0)
+    addi	s1,a5,1
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    sw	s1,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L21:
+    li	t5,1
+    lw	t4,-388(s0)
+    slt    s1,t5,t4
+    mv    s10,s1
+    mv    s1,s10
+    seqz    s10,s1
+    bne    s10,zero,.L22
+    lw	a5,-404(s0)
+    addi	s10,a5,-1
+    mv    s11,s10
+    slli    a4,s11,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s10,0(a3)
+    li	t5,-1
+    mv    t4,s10
+    sub    s11,t5,t4
+    seqz    s11,s11
+    seqz    s11,s11
+    mv    s10,s11
+    mv    t5,s1
+    mv    t4,s10
+    and    s1,t5,t4
+    bne    s1,zero,.L23
+.L22:
+    j    .L24
+.L23:
+    lw	a5,-404(s0)
+    addi	s1,a5,-1
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    sw	s1,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L24:
+    lw	t5,-384(s0)
+    lui    t4,%hi(n_0)
+    lw	t4,%lo(n_0)(t4)
+    slt    s1,t5,t4
+    mv    s10,s1
+    mv    s1,s10
+    seqz    s10,s1
+    bne    s10,zero,.L25
+    lw	a5,-404(s0)
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    add    s10,a5,a4
+    mv    s11,s10
+    slli    a4,s11,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s10,0(a3)
+    li	t5,-1
+    mv    t4,s10
+    sub    s11,t5,t4
+    seqz    s11,s11
+    seqz    s11,s11
+    mv    s10,s11
+    mv    t5,s1
+    mv    t4,s10
+    and    s1,t5,t4
+    bne    s1,zero,.L26
+.L25:
+    j    .L27
+.L26:
+    lw	a5,-404(s0)
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    add    s1,a5,a4
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    sw	s1,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L27:
+    li	t5,1
+    lw	t4,-384(s0)
+    slt    s1,t5,t4
+    mv    s10,s1
+    mv    s1,s10
+    seqz    s10,s1
+    bne    s10,zero,.L28
+    lw	a5,-404(s0)
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    sub    s10,a5,a4
+    mv    s11,s10
+    slli    a4,s11,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s10,0(a3)
+    li	t5,-1
+    mv    t4,s10
+    sub    s11,t5,t4
+    seqz    s11,s11
+    seqz    s11,s11
+    mv    s10,s11
+    mv    t5,s1
+    mv    t4,s10
+    and    s1,t5,t4
+    bne    s1,zero,.L29
+.L28:
+    j    .L30
+.L29:
+    lw	a5,-404(s0)
+    lui    a4,%hi(n_0)
+    lw	a4,%lo(n_0)(a4)
+    sub    s1,a5,a4
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-404(s0)
+    sw	a5,-12(sp)
+    sw	s1,-16(sp)
+    call    mmerge
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+.L30:
+    li	s1,0
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s10,0(a3)
+    li	t5,-1
+    mv    t4,s10
+    sub    s1,t5,t4
+    seqz    s1,s1
+    seqz    s1,s1
+    mv    s10,s1
+    seqz    s1,s10
+    bne    s1,zero,.L31
+    lw	a5,-400(s0)
+    mv    s1,a5
+    slli    a4,s1,2
+    lui    a3,%hi(array_0)
+    addi	a3,a3,%lo(array_0)
+    add    a3,a3,a4
+    lw	s11,0(a3)
+    li	t5,-1
+    mv    t4,s11
+    sub    s1,t5,t4
+    seqz    s1,s1
+    seqz    s1,s1
+    mv    s11,s1
+    seqz    s1,s11
+    bne    s1,zero,.L31
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    li	a5,0
+    sw	a5,-12(sp)
+    call    findfa
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s1,a0
+    sw	s10,-368(s0)
+    sw	s1,-372(s0)
+    sw	s11,-348(s0)
+    sw	s2,-44(s0)
+    sw	s3,-48(s0)
+    lw	a5,-400(s0)
+    sw	a5,-12(sp)
+    call    findfa
+    lw	s10,-368(s0)
+    lw	s1,-372(s0)
+    lw	s11,-348(s0)
+    lw	s2,-44(s0)
+    lw	s3,-48(s0)
+    mv    s2,a0
+    mv    t5,s2
+    mv    t4,s1
+    sub    s3,t5,t4
+    seqz    s3,s3
+    mv    s1,s3
+    mv    t5,s11
+    mv    t4,s1
+    and    s11,t5,t4
+    mv    t5,s10
+    mv    t4,s11
+    and    s10,t5,t4
+    bne    s10,zero,.L33
+.L31:
+    j    .L14
+.L33:
+    li	a5,1
+    sw	a5,-396(s0)
+    lw	a5,-392(s0)
+    addi	s1,a5,1
+    mv    a5,s1
+    sw	a5,-408(s0)
+    lw	a0,-408(s0)
+    call    putint
+    mv    s1,a0
+    li	a0,10
+    call    putch
+    mv    s1,a0
+.L14:
+    lw	a5,-392(s0)
+    addi	s1,a5,1
+    mv    a5,s1
+    sw	a5,-392(s0)
+    j    .L35
+.L12:
+    lw	t5,-396(s0)
+    li	t4,0
+    sub    s1,t5,t4
+    seqz    s1,s1
+    mv    s10,s1
+    bne    s10,zero,.L36
+    j    .L37
+.L36:
+    li	a0,-1
+    call    putint
+    mv    s1,a0
+    li	a0,10
+    call    putch
+    mv    s1,a0
+.L37:
+    j    .L38
+.L10:
     li	a0,0
     lw	ra,-8(s0)
     lw	s0,-4(s0)
-    addi	sp,sp,108
+    addi	sp,sp,412
+    jr    ra
+    li	a0,0
+    lw	ra,-8(s0)
+    lw	s0,-4(s0)
+    addi	sp,sp,412
     jr    ra
 	.size	main, .-main
 	.ident	"GCC: (GNU) 9.2.0"
